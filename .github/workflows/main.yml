@@ -8,15 +8,36 @@ jobs:
   CI:
     runs-on: ubuntu-latest
     steps:
+      - run: echo "Obter o Código"
+
       - name: Checkout do Código
         uses: actions/checkout@v5
 
-      - run: echo "Obter o Código"
+      - run: echo "Entrando no diretorio "
+      - run: cd 02-encontros-tech
+
+      - name: Configurar Python
+        id: setup-python
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Instalar Dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Executar Testes
+        run: |
+          python -m pytest tests/ -v  
+
+
       - run: echo "Executar o Docker Build"
       - run: echo "Enviar para o DockerHub"
   CD:
     needs: CI # Garante que o CD só rodará se o CI for bem-sucedido
-      
+
     runs-on: ubuntu-latest
     steps:
       - run: echo "Obter o Codigo"
