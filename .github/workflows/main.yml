@@ -47,7 +47,6 @@ jobs:
           # Você pode adicionar mais tags, como 'latest':
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/bootcamp-encontros-tech:latest
-            # ${{ vars.DOCKERHUB_USERNAME }}/bootcamp-encontros-tech:${{ github.sha }}
             ${{ vars.DOCKERHUB_USERNAME }}/bootcamp-encontros-tech:${{ github.run_number }}
   CD:
     needs: CI # Garante que o CD só rodará se o CI for bem-sucedido
