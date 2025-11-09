@@ -37,8 +37,17 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - run: echo "Executar o Docker Build"
-      - run: echo "Enviar para o DockerHub"
+      - name: Construir e Enviar Imagem Docker
+        uses: docker/build-push-action@v5
+        with:
+          file: ./02-encontros-tech/Dockerfile
+          context: ./02-encontros-tech # Onde está o Dockerfile
+          push: true
+          # tags: ${{ vars.DOCKERHUB_USERNAME }}/bootcamp-encontros-tech:${{ github.sha }}
+          # Você pode adicionar mais tags, como 'latest':
+          tags: |
+            ${{ vars.DOCKERHUB_USERNAME }}/bootcamp-encontros-tech:latest
+            ${{ vars.DOCKERHUB_USERNAME }}/bootcamp-encontros-tech:${{ github.sha }}      
   CD:
     needs: CI # Garante que o CD só rodará se o CI for bem-sucedido
 
