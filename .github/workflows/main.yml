@@ -13,19 +13,18 @@ jobs:
       - name: Checkout do Código
         uses: actions/checkout@v5
 
-      - run: echo "Entrando no diretorio "
-      - run: cd 02-encontros-tech
-
       - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
       - name: Instalar Dependências
+        working-directory: 02-encontros-tech
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Executar Testes
+        working-directory: 02-encontros-tech
         run: |
           python -m pytest tests/ -v  
 
