@@ -48,7 +48,8 @@ jobs:
           file: ./02-encontros-tech/Dockerfile
           context: ./02-encontros-tech
           push: true
-          platforms: linux/amd64,linux/arm64 # <-- Adicione esta linha!
+          platforms: linux/amd64
+          # platforms: linux/amd64,linux/arm64 # <-- Adicione esta linha!
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/bootcamp-encontros-tech:latest
             ${{ vars.DOCKERHUB_USERNAME }}/bootcamp-encontros-tech:${{ github.run_number }}
@@ -56,7 +57,7 @@ jobs:
     needs: CI # Garante que o CD só rodará se o CI for bem-sucedido
 
     runs-on: ubuntu-latest
-    if: github.event_name == 'release'
+    # if: github.event_name == 'release'
 
     steps:
       - run: echo "Obter o Código"
