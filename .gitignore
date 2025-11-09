@@ -221,3 +221,13 @@ __marimo__/
 kubeconfig
 
 *.Identifier
+
+
+# Terraform
+.terraform/
+*.tfplan
+*.tfstate
+*.tfstate.backup
+*.tfvars.json
+# Sensitive variables (ensure this is NOT committed)
+secrets.tfvars # <-- Importante: não versionar o arquivo claro
