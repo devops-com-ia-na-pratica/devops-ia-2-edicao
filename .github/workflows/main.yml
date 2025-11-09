@@ -8,10 +8,15 @@ jobs:
   CI:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout do Código
+        uses: actions/checkout@v5
+
       - run: echo "Obter o Código"
       - run: echo "Executar o Docker Build"
       - run: echo "Enviar para o DockerHub"
   CD:
+    needs: CI # Garante que o CD só rodará se o CI for bem-sucedido
+      
     runs-on: ubuntu-latest
     steps:
       - run: echo "Obter o Codigo"
