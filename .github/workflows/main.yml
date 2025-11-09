@@ -11,12 +11,14 @@ jobs:
       - run: echo "Obter o Código"
 
       - name: Checkout do Código
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4 # Recomendo a v4, que é a mais recente estável. A v5 ainda está em preview.
 
-      - name: Configurar Docker Buildx (para multi-arquitetura, opcional)
+      # NOTA: Você tem dois passos "Configurar Docker Buildx". Um deles é redundante.
+      # Recomendo manter apenas um, geralmente o primeiro antes de qualquer operação Docker.
+      - name: Configurar Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v5 # Recomendo a v5, que é a mais recente estável. A v6 ainda está em preview.
         with:
           python-version: '3.11'
 
@@ -29,10 +31,11 @@ jobs:
       - name: Executar Testes
         working-directory: 02-encontros-tech
         run: |
-          python -m pytest tests/ -v  
+          python -m pytest tests/ -v
 
-      - name: Configurar Docker Buildx (para multi-arquitetura, opcional)
-        uses: docker/setup-buildx-action@v3
+      # REMOVA O SEGUNDO "Configurar Docker Buildx" AQUI, POIS JÁ ESTÁ CONFIGURADO ACIMA.
+      # - name: Configurar Docker Buildx (para multi-arquitetura, opcional)
+      #   uses: docker/setup-buildx-action@v3
 
       - name: Login no Docker Hub
         uses: docker/login-action@v3
@@ -44,10 +47,9 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           file: ./02-encontros-tech/Dockerfile
-          context: ./02-encontros-tech # Onde está o Dockerfile
+          context: ./02-encontros-tech
           push: true
-          # tags: ${{ vars.DOCKERHUB_USERNAME }}/bootcamp-encontros-tech:${{ github.sha }}
-          # Você pode adicionar mais tags, como 'latest':
+          platforms: linux/amd64,linux/arm64 # <-- Adicione esta linha!
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/bootcamp-encontros-tech:latest
             ${{ vars.DOCKERHUB_USERNAME }}/bootcamp-encontros-tech:${{ github.run_number }}
