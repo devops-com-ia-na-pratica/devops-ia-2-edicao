@@ -76,6 +76,13 @@ jobs:
         # echo "${{ secrets.KUBE_CONFIG }}" > kubeconfig.yaml
         # export KUBECONFIG=kubeconfig.yaml
 
+      - name: Prepare Kubernetes manifest with correct image tag
+        run: |
+          # Comando shell equivalente:
+          # sed -i "s|image: encontros-tech:latest|image: registry.digitalocean.com/encontros-tech/app:${{ github.event.release.tag_name }}|g" 02-encontros-tech/k8s/app.yaml
+          sed -i "s|image: .*|image: ${{ vars.DOCKERHUB_USERNAME }}/bootcamp-encontros-tech:${{ github.run_number }}|g" 02-encontros-tech/k8s/app.yaml
+
+
       - run: echo "Executar o apply"
       - name: Deploy to Kubernetes
         uses: Azure/k8s-deploy@v4
