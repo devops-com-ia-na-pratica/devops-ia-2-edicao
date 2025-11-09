@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conversao-distancia
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: conversao-distancia
+  template:
+    metadata:
+      labels:
+        app: conversao-distancia
+    spec:
+      containers:
+      - name: conversao-distancia
+        image: hernanisoares/conversao-distancia:latest
+        ports:
+        - containerPort: 8000

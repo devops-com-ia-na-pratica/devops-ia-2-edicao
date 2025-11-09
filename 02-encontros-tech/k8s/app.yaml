@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: encontros-tech
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: encontros-tech
+  template:
+    metadata:
+      labels:
+        app: encontros-tech
+    spec:
+      containers:
+      - name: encontros-tech
+        image: encontros-tech:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://user:password@your-managed-db-host:5432/encontros_tech"
+        - name: DEBUG
+          value: "False"
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: PROMETHEUS_MULTIPROC_DIR
+          value: "/tmp/prometheus"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: encontros-tech
+spec:
+  selector:
+    app: encontros-tech
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: LoadBalancer

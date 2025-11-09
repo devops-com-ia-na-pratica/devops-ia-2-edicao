@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: encontros-tech
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: encontros-tech
+  template:
+    metadata:
+      labels:
+        app: encontros-tech
+    spec:
+      containers:
+      - name: encontros-tech
+        image: encontros-tech:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: PROMETHEUS_MULTIPROC_DIR
+          value: "/tmp/prometheus"

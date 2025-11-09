@@ -1,0 +1,38 @@
+# Estágio de build
+FROM python:3.11-slim as builder
+
+# Define o diretório de trabalho
+WORKDIR /app
+
+# Copia o arquivo de dependências
+COPY requirements.txt .
+
+# Instala as dependências em um ambiente virtual
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Estágio final
+FROM python:3.11-slim
+
+# Define o diretório de trabalho
+WORKDIR /app
+
+# Copia o ambiente virtual do estágio de build
+COPY --from=builder /opt/venv /opt/venv
+
+# Copia os arquivos da aplicação
+COPY . .
+
+# Define o caminho para o ambiente virtual
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Cria um usuário não-root
+RUN useradd --create-home appuser
+USER appuser
+
+# Expõe a porta que o Gunicorn irá rodar
+EXPOSE 8000
+
+# Comando para rodar a aplicação com Gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "main:app"]
